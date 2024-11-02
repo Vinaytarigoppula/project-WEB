@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 800px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .header div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .table-container {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: bold;
+        }
+
+        table td {
+            background-color: #ffffff;
+            color: #333;
+            border-bottom: 1px solid #eee;
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-group div {
+            flex: 1;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .footer, .taskbar {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .button {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .total-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .total-section label {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .total-section input {
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <label>Bill No.:</label>
+                <input type="text" value="7996" readonly>
+            </div>
+            <div>
+                <label>Date:</label>
+                <input type="text" value="07 Oct 2024" readonly>
+            </div>
+        </div>
+
+        <div class="taskbar">
+            <button class="button" onclick="addItem()">Add Item</button>
+        </div>
+
+        <div class="table-container">
+            <table id="itemTable">
+                <thead>
+                    <tr>
+                        <th>Item Code</th>
+                        <th>Name</th>
+                        <th>Rate</th>
+                        <th>Quantity</th>
+                        <th>Amount</th>
+                        <th>Discount (10%)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Item rows will be added dynamically here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="input-group">
+            <div>
+                <label>Customer Name:</label>
+                <input type="text" placeholder="Enter customer name">
+            </div>
+            <div>
+                <label>Sale Type:</label>
+                <select>
+                    <option value="cash">Cash</option>
+                    <option value="card">Card</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="total-section">
+            <label>Bill Amount:</label>
+            <input type="text" id="totalAmount" value="0.00" readonly>
+            <label>Discount Amount:</label>
+            <input type="text" id="totalDiscount" value="0.00" readonly>
+            <label>Net Amount:</label>
+            <input type="text" id="netAmount" value="0.00" readonly>
+        </div>
+
+        <div class="footer">
+            <button class="button" onclick="calculateTotal()">Calculate Total</button>
+            <button class="button" onclick="clearItems()">Clear Items</button>
+        </div>
+    </div>
+
+    <script>
+        function addItem() {
+            const table = document.getElementById("itemTable").getElementsByTagName("tbody")[0];
+            const row = table.insertRow();
+
+            row.innerHTML = `
+                <td><input type="text" placeholder="Code"></td>
+                <td><input type="text" placeholder="Name"></td>
+                <td><input type="number" value="0" onchange="calculateAmount(this)"></td>
+                <td><input type="number" value="1" onchange="calculateAmount(this)"></td>
+                <td class="amount">0.00</td>
+                <td class="discount">0.00</td>
+                <td><button onclick="removeItem(this)" class="button" style="background-color: #dc3545;">Remove</button></td>
+            `;
+        }
+
+        function removeItem(button) {
+            const row = button.parentElement.parentElement;
+            row.remove();
+            calculateTotal();
+        }
+
+        function calculateAmount(element) {
+            const row = element.parentElement.parentElement;
+            const rate = parseFloat(row.cells[2].children[0].value) || 0;
+            const quantity = parseFloat(row.cells[3].children[0].value) || 0;
+
+            // Calculate amount and discount
+            const amount = rate * quantity;
+            const discount = amount * 0.1;  // 10% discount
+
+            // Update the row's amount and discount cells
+            row.querySelector('.amount').textContent = amount.toFixed(2);
+            row.querySelector('.discount').textContent = discount.toFixed(2);
+
+            // Recalculate the total
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const amounts = document.querySelectorAll('.amount');
+            const discounts = document.querySelectorAll('.discount');
+
+            let totalAmount = 0;
+            let totalDiscount = 0;
+
+            amounts.forEach(amount => {
+                totalAmount += parseFloat(amount.textContent);
+            });
+
+            discounts.forEach(discount => {
+                totalDiscount += parseFloat(discount.textContent);
+            });
+
+            const netAmount = totalAmount - totalDiscount;
+
+            // Update totals in the summary section
+            document.getElementById('totalAmount').value = totalAmount.toFixed(2);
+            document.getElementById('totalDiscount').value = totalDiscount.toFixed(2);
+            document.getElementById('netAmount').value = netAmount.toFixed(2);
+        }
+
+        function clearItems() {
+            const table = document.getElementById("itemTable").getElementsByTagName("tbody")[0];
+            table.innerHTML = ""; // Clear all items
+            calculateTotal(); // Reset total values
+        }
+    </script>
+</body>
+</html>
