@@ -14,6 +14,7 @@ app.get("/", (req, res) => {
   res.render("login.ejs");
   //Step 1 - Make the get route work and render the index.ejs file.
 });
+app.post("/login")
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
   });
