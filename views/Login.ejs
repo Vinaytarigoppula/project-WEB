@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
     <link rel="stylesheet" href="static/login.css">
 </head>
 <body>
@@ -14,15 +13,13 @@
         <div class="separator"></div>
         <div class="horizontal-layout-css right-login">
             <label class="login-fonts">Login Credentials</label><br>
-            <form method="post">
-                <div class="input-group">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" class="textbox" required>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" class="textbox" required>
-                    <button type="submit">Login</button>
-                    <span>Don't have an account? <a href="register.html">Register</a></span>
-                </div>
+            <form action="/login" method="post" class="input-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" class="textbox" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" class="textbox" required>
+                <button type="submit">Login</button>
+                <span>Don't have an account? <a href="register.html">Register</a></span>
             </form>
         </div>
     </div>
