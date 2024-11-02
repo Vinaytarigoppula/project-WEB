@@ -11,7 +11,7 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-  res.render("login.ejs");
+  res.render("index.ejs");
   //Step 1 - Make the get route work and render the index.ejs file.
 });
 app.post("/login")
