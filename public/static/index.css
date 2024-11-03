@@ -1,3 +1,4 @@
+/* General Layout */
 body {
     font-family: Arial, sans-serif;
     display: flex;
@@ -16,10 +17,30 @@ body {
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 40px;
+    margin-top: 80px;
 }
 
-.header, .input-group, .footer, .taskbar, .total-section {
+/* Header and Input Group Styling */
+.header {
+    display: flex;
+    justify-content: space-between; /* This keeps the two sections apart */
+    align-items: center; /* Vertically center items */
+    margin-bottom: 15px; /* Space below the header */
+    font-size: 14px; /* Font size */
+    color: #666; /* Text color */
+    width: 100%; /* Ensure header takes full width */
+}
+
+.left {
+    flex: 1; /* Allows the left section to take available space */
+}
+
+.right {
+    flex: 0 0 auto; /* Prevents the right section from growing */
+    text-align: right; /* Right align text */
+}
+
+.input-group, .footer, .taskbar, .total-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -29,7 +50,9 @@ body {
     font-size: 14px;
     color: #666;
 }
-
+.header input{
+    border-radius: 4px;
+}
 .header div, .input-group div {
     flex: 1;
     min-width: 150px;
@@ -40,40 +63,136 @@ body {
     color: #333;
 }
 
+/* Table Styling */
+/* Container Styling */
+.container {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+    overflow: hidden; /* Ensures contents stay within container */
+}
+
+/* Table Container Styling */
 .table-container {
     border: 1px solid #ddd;
     border-radius: 5px;
-    overflow-x: auto;
     margin-bottom: 20px;
+    overflow-x: auto; /* Enables horizontal scroll if content overflows */
 }
 
+/* Table Styling */
 table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
+    table-layout: fixed; /* Ensures columns maintain a fixed width */
+}
+td {
+    padding: 0; /* Removes padding from the table cell */
+}
+
+td input {
+    width: 100%; /* Fills the width of the cell */
+    height: 100%; /* Fills the height of the cell */
+    padding: 0; /* Removes default padding */
+    margin: 0; /* Removes default margin */
+    border-radius: 4px;
+    box-sizing: border-box; /* Includes padding and border in width/height */
 }
 
 table th, table td {
-    padding: 8px;
+    padding: 10px;
     text-align: left;
     border: 1px solid #ddd;
+    white-space: nowrap;
+    overflow: hidden; /* Prevents content overflow */
+    text-overflow: ellipsis; /* Adds ellipsis for overflowing content */
+}
+.itemcode {
+    border-radius: 4px; /* Adjust the value for desired roundness */
+    border: 1px solid #ccc; /* Border color */
+    padding: 5px; /* Padding inside the select */
+    font-size: 14px; /* Font size */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Ensure padding and border are included in the total width */
 }
 
-table th {
+.nameField {
+    border-radius: 5px; /* Adjust the value for desired roundness */
+    border: 1px solid #ccc; /* Border color */
+    padding: 5px; /* Padding inside the input */
+    font-size: 14px; /* Font size */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Ensure padding and border are included in the total width */
+}
+
+.rateField {
+    border-radius: 5px; /* Adjust the value for desired roundness */
+    border: 1px solid #ccc; /* Border color */
+    padding: 5px; /* Padding inside the input */
+    font-size: 14px; /* Font size */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Ensure padding and border are included in the total width */
+    
+}
+.quantityField {
+    border-radius: 5px; /* Adjust the value for desired roundness */
+    border: 1px solid #ccc; /* Border color */
+    padding: 5px; /* Padding inside the input */
+    font-size: 14px; /* Font size */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Ensure padding and border are included in the total width */
+}
+
+.discountField {
+    border-radius: 5px; /* Adjust the value for desired roundness */
+    border: 1px solid #ccc; /* Border color */
+    padding: 5px; /* Padding inside the input */
+    font-size: 14px; /* Font size */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Ensure padding and border are included in the total width */
+    
+}
+
+.table th {
     background-color: #f8f9fa;
     font-weight: bold;
 }
 
-.input-group input, .input-group select, .total-section input {
-    width: 100%;
+/* Input Styling */
+.input-group input, .input-group select{
+    width: 90%;
     padding: 8px;
-    border: 1px solid #ddd;
+    border: 0px solid #ccc; /* Softer border */
     border-radius: 4px;
     font-size: 14px;
     background-color: #f8f9fa;
     color: #333;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
+    transition: border-color 0.3s;
 }
 
+.total-section input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc; /* Softer border */
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #f8f9fa;
+    color: #333;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
+    transition: border-color 0.3s;
+}
+.input-group input:focus, .input-group select:focus, .total-section input:focus {
+    border-color: #007bff; /* Highlight border on focus */
+    outline: none;
+}
+
+/* Button Styling */
 .button {
     padding: 10px 16px;
     background-color: #007bff;
@@ -82,20 +201,14 @@ table th {
     border-radius: 4px;
     font-size: 14px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
-
 .button:hover {
     background-color: #0056b3;
+    box-shadow: 0 4px 6px rgba(0, 91, 187, 0.2);
 }
 
-.footer, .taskbar {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
+/* Responsive Adjustments */
 @media (max-width: 800px) {
     .container {
         width: 100%;
