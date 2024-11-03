@@ -3,13 +3,75 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center; /* Center main container vertically */
     min-height: 100vh;
     background-color: #f0f2f5;
     color: #333;
     margin: 0;
+    padding-top: 60px; /* Offset for fixed navbar */
 }
 
+/* Navbar Styling */
+.navbar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #004085;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px; /* Adjusted padding to give more space */
+    color: #ffffff;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* Navbar Buttons */
+.nav-buttons {
+    display: block;
+    gap: 40px;
+    margin: 0px 40px; /* Pushes the buttons to the far right */
+    align-items: center;
+}
+
+.nav-buttons button {
+    white-space: nowrap; /* Prevents text from wrapping */
+    overflow: hidden;    /* Optional: hides any overflow text */
+    text-overflow: ellipsis;
+    padding: 8px 12px;
+    background-color: #0069d9;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #ffffff;
+    cursor: pointer;
+    margin: 0px 10px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.nav-buttons button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.nav-buttons button:focus {
+    outline: none;
+    background-color: #004085;
+}
+
+/* Main Container Styling */
+.main-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    min-height: calc(100vh - 60px); /* Full height minus navbar */
+    width: 100%;
+    padding-top: 30px; /* Offset for navbar */
+}
+
+/* Form Container Styling */
 .container {
     width: 100%;
     max-width: 800px;
@@ -17,7 +79,8 @@ body {
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 80px;
+    margin: 0 20px;
+    overflow: hidden; /* Ensures contents stay within container */
 }
 
 /* Header and Input Group Styling */
@@ -50,9 +113,11 @@ body {
     font-size: 14px;
     color: #666;
 }
-.header input{
+
+.header input {
     border-radius: 4px;
 }
+
 .header div, .input-group div {
     flex: 1;
     min-width: 150px;
@@ -64,19 +129,6 @@ body {
 }
 
 /* Table Styling */
-/* Container Styling */
-.container {
-    width: 100%;
-    max-width: 800px;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 40px;
-    overflow: hidden; /* Ensures contents stay within container */
-}
-
-/* Table Container Styling */
 .table-container {
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -84,13 +136,13 @@ body {
     overflow-x: auto; /* Enables horizontal scroll if content overflows */
 }
 
-/* Table Styling */
 table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
     table-layout: fixed; /* Ensures columns maintain a fixed width */
 }
+
 td {
     padding: 0; /* Removes padding from the table cell */
 }
@@ -112,59 +164,18 @@ table th, table td {
     overflow: hidden; /* Prevents content overflow */
     text-overflow: ellipsis; /* Adds ellipsis for overflowing content */
 }
-.itemcode {
-    border-radius: 4px; /* Adjust the value for desired roundness */
-    border: 1px solid #ccc; /* Border color */
-    padding: 5px; /* Padding inside the select */
-    font-size: 14px; /* Font size */
-    width: 100%; /* Full width */
-    box-sizing: border-box; /* Ensure padding and border are included in the total width */
-}
 
-.nameField {
+.itemcode, .nameField, .rateField, .quantityField, .discountField {
     border-radius: 5px; /* Adjust the value for desired roundness */
     border: 1px solid #ccc; /* Border color */
     padding: 5px; /* Padding inside the input */
     font-size: 14px; /* Font size */
     width: 100%; /* Full width */
     box-sizing: border-box; /* Ensure padding and border are included in the total width */
-}
-
-.rateField {
-    border-radius: 5px; /* Adjust the value for desired roundness */
-    border: 1px solid #ccc; /* Border color */
-    padding: 5px; /* Padding inside the input */
-    font-size: 14px; /* Font size */
-    width: 100%; /* Full width */
-    box-sizing: border-box; /* Ensure padding and border are included in the total width */
-    
-}
-.quantityField {
-    border-radius: 5px; /* Adjust the value for desired roundness */
-    border: 1px solid #ccc; /* Border color */
-    padding: 5px; /* Padding inside the input */
-    font-size: 14px; /* Font size */
-    width: 100%; /* Full width */
-    box-sizing: border-box; /* Ensure padding and border are included in the total width */
-}
-
-.discountField {
-    border-radius: 5px; /* Adjust the value for desired roundness */
-    border: 1px solid #ccc; /* Border color */
-    padding: 5px; /* Padding inside the input */
-    font-size: 14px; /* Font size */
-    width: 100%; /* Full width */
-    box-sizing: border-box; /* Ensure padding and border are included in the total width */
-    
-}
-
-.table th {
-    background-color: #f8f9fa;
-    font-weight: bold;
 }
 
 /* Input Styling */
-.input-group input, .input-group select{
+.input-group input, .input-group select {
     width: 90%;
     padding: 8px;
     border: 0px solid #ccc; /* Softer border */
@@ -187,6 +198,7 @@ table th, table td {
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
     transition: border-color 0.3s;
 }
+
 .input-group input:focus, .input-group select:focus, .total-section input:focus {
     border-color: #007bff; /* Highlight border on focus */
     outline: none;
@@ -203,6 +215,7 @@ table th, table td {
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;
 }
+
 .button:hover {
     background-color: #0056b3;
     box-shadow: 0 4px 6px rgba(0, 91, 187, 0.2);

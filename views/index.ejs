@@ -7,14 +7,24 @@
     <link rel="stylesheet" href="static/index.css">
 </head>
 <body>
+    <div class="nav-container">
+        <div class="navbar">
+            <span>Billing Application</span>
+            <div class="nav-buttons">
+                <button>Add Product</button>
+                <button>Logout</button>
+                <button>Profile</button>
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div class="header">
             <div class="left">
-                <label>Bill No.:</label>
+                <label>Bill No.:</label><br>
                 <input type="text" value="7996" readonly>
             </div>
             <div class="right">
-                <label>Date:</label>
+                <label>Date:</label><br>
                 <input type="text" value="07 Oct 2024" readonly>
             </div>
         </div>
@@ -44,7 +54,7 @@
 
         <div class="input-group">
             <div>
-                <label>Customer Name:</label>
+                <label>Customer Name:</label><br>
                 <input type="text" placeholder="Enter customer name">
             </div>
             <div>
@@ -115,9 +125,8 @@
         function updateProductName(selectElement) {
             const selectedCode = selectElement.value;
             const row = selectElement.parentElement.parentElement;
-            const nameField = row.cells[1].children[0]; // Access the "Name" input field
+            const nameField = row.cells[1].children[0];
 
-            // Set the name based on the selected item code
             nameField.value = itemMapping[selectedCode] || "";
         }
 
