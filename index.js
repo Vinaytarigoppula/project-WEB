@@ -71,7 +71,7 @@ app.post("/login", async (req, res) => {
     }
 }
 else{
-    res.send("user  found");
+    res.send("user not found");
 }
 });
 app.listen(port, () => {
