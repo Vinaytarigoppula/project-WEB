@@ -1,0 +1,33 @@
+<!-- views/AddProduct.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <link rel="stylesheet" href="static/add.css">
+</head>
+<body>
+    <div class="nav-container">
+        <div class="navbar">
+            <a href="/index" class="nav-buttons"><button>Back</button></a>
+            <span class="nav-title">Adding Product</span>
+        </div>
+    </div>
+    <div class="container">
+        <form method="POST">
+            <label for="productName">Product Name:</label>
+            <input type="text" id="productName" name="productName" required><br>
+            
+            <label for="productCode">Product Code:</label>
+            <input type="text" id="productCode" name="productCode" required><br>
+            
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" required><br>
+            
+            <button type="submit">Add Product</button>
+        </form>
+    </div>
+</body>
+</html>

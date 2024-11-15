@@ -25,6 +25,8 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: false } // Set to true if using HTTPS
 }));
+app.set("view engine", "ejs"); // Add this line to ensure Express knows to use EJS as the view engine
+
 
 app.get("/", (req, res) => {
     res.render("Login.ejs"); 
@@ -36,6 +38,13 @@ app.get("/login", (req, res) => {
 app.get("/register", (req, res) => {
     res.render("Register.ejs");
 });
+
+app.get("/AddProduct", (req, res) => {
+    res.render("AddProduct.ejs");
+})
+app.get("/index", (req, res) => {
+    res.render("index");
+})
 app.post("/register",async (req,res)=>{
     let username=req.body.username;
     let password=req.body.password;
@@ -43,7 +52,6 @@ app.post("/register",async (req,res)=>{
     (await db).run("Insert into users (username,password) values(?,?)",[username,hashedPassword]);
     res.render("Login.ejs");
 })
-// Handle POST request for login
 app.post("/login", async (req, res) => {
     const user = req.body.username;
     const password = req.body.password;
@@ -66,7 +74,6 @@ else{
     res.send("user not found");
 }
 });
-app.get("/index")
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
