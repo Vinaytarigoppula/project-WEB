@@ -74,7 +74,7 @@ app.post("/login", async (req, res) => {
     if (isMatch) {
         // Passwords match, log in the user
         req.session.user = row.username; // Store the username in the session
-        res.render("index.ejs");
+        res.redirect("/index");
     }else
     {
         res.send("password not matched")
