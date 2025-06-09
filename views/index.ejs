@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Billing Application</title>
-    <link rel="stylesheet" href="static/index.css">
+    <link rel="stylesheet" href="/static/index.css">
 </head>
 <body>
     <div class="nav-container">
@@ -17,6 +17,7 @@
             </div>
         </div>
     </div>
+
     <div class="container">
         <div class="header">
             <div class="left">
@@ -47,7 +48,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Item rows will be added dynamically here -->
+                    <!-- Dynamic rows -->
                 </tbody>
             </table>
         </div>
@@ -82,26 +83,13 @@
         </div>
     </div>
 
-    <script>
-        // Mapping item codes to product names
-        const itemMapping = {
-            "00001": "Shirt",
-            "00002": "T-shirt",
-            "00003": "Pant",
-            "00004": "Kids wear",
-            "00005": "Night dress",
-            "00006": "Nighty",
-            "00007": "Chudidars",
-            "00008": "Frock",
-            "00009": "Long Frock",
-            "00010": "Ghagra",
-            "00011": "Plazo",
-            "00012": "Leggins",
-            "00013": "Jeggins",
-            "00014": "Chunni",
-            "00015": "Mix Offer"
-        };
+    <!-- Inject itemMapping from server -->
 
+    <script>
+        const itemMapping = <%- (itemMapping) %>
+    </script>
+
+    <script>
         function addItem() {
             const table = document.getElementById("itemTable").getElementsByTagName("tbody")[0];
             const row = table.insertRow();
@@ -124,62 +112,53 @@
 
         function updateProductName(selectElement) {
             const selectedCode = selectElement.value;
-            const row = selectElement.parentElement.parentElement;
-            const nameField = row.cells[1].children[0];
-
+            const row = selectElement.closest("tr");
+            const nameField = row.querySelector(".nameField");
             nameField.value = itemMapping[selectedCode] || "";
         }
 
         function removeItem(button) {
-            const row = button.parentElement.parentElement;
-            row.remove();
+            button.closest("tr").remove();
             calculateTotal();
         }
 
         function calculateAmount(element) {
-            const row = element.parentElement.parentElement;
-            const rate = parseFloat(row.cells[2].children[0].value) || 0;
-            const quantity = parseFloat(row.cells[3].children[0].value) || 0;
-            const discountPercent = parseFloat(row.cells[5].children[0].value) || 0;
+            const row = element.closest("tr");
+            const rate = parseFloat(row.querySelector(".rateField").value) || 0;
+            const quantity = parseFloat(row.querySelector(".quantityField").value) || 0;
+            const discountPercent = parseFloat(row.querySelector(".discountField").value) || 0;
 
             const amount = rate * quantity;
             const discount = (amount * discountPercent) / 100;
 
-            row.querySelector('.amount').textContent = (amount - discount).toFixed(2);
-
+            row.querySelector(".amount").textContent = (amount - discount).toFixed(2);
             calculateTotal();
         }
 
         function calculateTotal() {
-            const amounts = document.querySelectorAll('.amount');
-            const discounts = document.querySelectorAll('input[placeholder="Discount"]');
-
             let totalAmount = 0;
             let totalDiscount = 0;
 
-            amounts.forEach(amount => {
-                totalAmount += parseFloat(amount.textContent);
-            });
+            const rows = document.querySelectorAll("#itemTable tbody tr");
+            rows.forEach(row => {
+                const rate = parseFloat(row.querySelector(".rateField").value) || 0;
+                const quantity = parseFloat(row.querySelector(".quantityField").value) || 0;
+                const discountPercent = parseFloat(row.querySelector(".discountField").value) || 0;
 
-            discounts.forEach((discount, index) => {
-                const row = discount.parentElement.parentElement;
-                const rate = parseFloat(row.cells[2].children[0].value) || 0;
-                const quantity = parseFloat(row.cells[3].children[0].value) || 0;
-                const discountPercent = parseFloat(discount.value) || 0;
                 const amount = rate * quantity;
-                totalDiscount += (amount * discountPercent) / 100;
+                const discount = (amount * discountPercent) / 100;
+
+                totalAmount += amount;
+                totalDiscount += discount;
             });
 
-            const netAmount = totalAmount;
-
-            document.getElementById('totalAmount').value = totalAmount.toFixed(2);
-            document.getElementById('totalDiscount').value = totalDiscount.toFixed(2);
-            document.getElementById('netAmount').value = (totalAmount - totalDiscount).toFixed(2);
+            document.getElementById("totalAmount").value = totalAmount.toFixed(2);
+            document.getElementById("totalDiscount").value = totalDiscount.toFixed(2);
+            document.getElementById("netAmount").value = (totalAmount - totalDiscount).toFixed(2);
         }
 
         function clearItems() {
-            const table = document.getElementById("itemTable").getElementsByTagName("tbody")[0];
-            table.innerHTML = "";
+            document.querySelector("#itemTable tbody").innerHTML = "";
             calculateTotal();
         }
     </script>

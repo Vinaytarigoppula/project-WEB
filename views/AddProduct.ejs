@@ -16,28 +16,32 @@
         </div>
     </div>
     <div class="container">
-        <div>
+        <div class="box">
             <!-- View Item -->
-             <table>
+             <div class="viewProducts">
+                <table>
                 <tr>
                     <th>S No</th>
-                    <th>Item Code</th>
-                    <th>Item Name</th>
+                    <th>ITEM CODE</th>
+                    <th>ITEM NAME</th>
+                    <th>ACTION</th>
                 </tr>
+                <% let cnt = 1 %>
                 <% array.forEach(element => { %>
                 <tr>
-                    <td><%= element.id %></td>
+                    <td><%= cnt++ %></td>
                     <td><%= element.code %></td>
                     <td><%= element.name %></td>
+                    <td><img onclick="onDeleteHandler('<%= element.code %>')" src="/static/image.png" class="deleteProduct" name="delete" height="20px" width="20px">
+</td>
                 </tr>
                 <% }) %>
-
-
                 
-             </table>
-
+              </table>
+             </div>
+             
             <!-- Add Item -->
-             <div>
+             <div class="addProducts">
                 <form action="/addproduct" method="POST">
                 <label for="productName">Product Name:</label>
                 <input type="text" id="name" name="name" required><br>
@@ -53,4 +57,22 @@
         
     </div>
 </body>
+  <script>
+  function onDeleteHandler(code) {
+    fetch(`/deleteproduct?code=${encodeURIComponent(code)}`, {
+      method: 'GET'
+    })
+    .then(response => {
+      if (response.ok) {
+        // Reload the page to reflect deletion
+        window.location.reload();
+      } else {
+        alert("Failed to delete product.");
+      }
+    })
+    .catch(err => {
+      console.error("Error:", err);
+    });
+  }
+</script>
 </html>

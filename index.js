@@ -40,12 +40,21 @@ app.get("/register", (req, res) => {
 });
 app.get("/AddProduct", async (req, res) => {
     let array = await (await db).all("SELECT * FROM product");
-    console.log(array);
+    // console.log(array);
     res.render("AddProduct.ejs", { array });
 });
-app.get("/index", (req, res) => {
-    res.render("index");
-})
+app.get("/index", async (req, res) => {
+    let array = await (await db).all("SELECT * FROM product");
+
+    // Create a code-to-name mapping
+    let itemMapping = {};
+    array.forEach(item => {
+        itemMapping[item.code] = item.name;
+    });
+
+    res.render("index", { array, itemMapping: JSON.stringify(itemMapping) });
+});
+
 app.post("/register",async (req,res)=>{
     let username=req.body.username;
     let password=req.body.password;
@@ -79,8 +88,18 @@ app.post("/addproduct",async(req,res)=>{
     let code=req.body.code;
     let name=req.body.name;
     (await db).run("INSERT INTO product (code, name) VALUES(?,?) ",[code,name]);
-    res.redirect("/index"); 
+    res.redirect("/addproduct"); 
 })
+app.get("/deleteproduct", async (req, res) => {
+    const code = req.query.code;
+    try {
+        await (await db).run("DELETE FROM product WHERE code = ?", [code]);
+        res.sendStatus(200); // success
+    } catch (err) {
+        console.error("Deletion failed:", err);
+        res.sendStatus(500); // error
+    }
+});
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });

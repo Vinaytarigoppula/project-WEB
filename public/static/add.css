@@ -2,18 +2,89 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
 }
-/* General container styling */
+
 .container {
     width: 100%;
-    max-width: 500px;
-    margin: 100px auto; /* Centers the container vertically and horizontally */
+    max-width: 70%;
+    margin: 80px auto;
+}
+.box{
+    display: flex;
+    max-width:100%;
+    gap: 50px;
+    flex-direction: row;
+    justify-content:space-between;
+}
+.viewProducts {
+    max-height: 600px; 
+    width: 250%;
+    overflow-x: scroll;
+    overflow-y :scroll;
+    padding-right: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+/* Table styling */
+.viewProducts table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+}
+
+.viewProducts th,
+.viewProducts td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+
+}
+
+.viewProducts th {
+    background-color: #004085;
+    color: #ffffff;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.viewProducts tr:nth-child(even) {
+    background-color: #f8f6f6;
+}
+
+.viewProducts tr:hover {
+    background-color: #e9f1ff;
+    cursor: default;
+}
+
+/* Optional: Custom scrollbar for modern browsers */
+.viewProducts::-webkit-scrollbar {
+    width: 10px;
+}
+
+.viewProducts::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 8px;
+}
+
+.viewProducts::-webkit-scrollbar-thumb:hover {
+    background: #0b0000;
+}
+.deleteProduct{
+    cursor: pointer;
+}
+.addProducts{
+    width: 100%;
+    max-width: 600px;
+    margin: 100px auto;
     padding: 20px;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
 }
-
 /* Navbar styling */
 .nav-container {
     width: 100%;
