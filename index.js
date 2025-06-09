@@ -38,10 +38,11 @@ app.get("/login", (req, res) => {
 app.get("/register", (req, res) => {
     res.render("Register.ejs");
 });
-
-app.get("/AddProduct", (req, res) => {
-    res.render("AddProduct.ejs");
-})
+app.get("/AddProduct", async (req, res) => {
+    let array = await (await db).all("SELECT * FROM product");
+    console.log(array);
+    res.render("AddProduct.ejs", { array });
+});
 app.get("/index", (req, res) => {
     res.render("index");
 })
@@ -74,6 +75,12 @@ else{
     res.send("user not found");
 }
 });
+app.post("/addproduct",async(req,res)=>{
+    let code=req.body.code;
+    let name=req.body.name;
+    (await db).run("INSERT INTO product (code, name) VALUES(?,?) ",[code,name]);
+    res.redirect("/index"); 
+})
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });

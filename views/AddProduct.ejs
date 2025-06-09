@@ -25,23 +25,25 @@
                     <th>Item Name</th>
                 </tr>
                 <% array.forEach(element => { %>
-                 <tr>
-                    <td>element.id</td>
-                    <td>element.code</td>
-                    <td>element.name</td>
-                 </tr>
+                <tr>
+                    <td><%= element.id %></td>
+                    <td><%= element.code %></td>
+                    <td><%= element.name %></td>
+                </tr>
                 <% }) %>
+
+
                 
              </table>
 
             <!-- Add Item -->
              <div>
-                <form method="POST">
+                <form action="/addproduct" method="POST">
                 <label for="productName">Product Name:</label>
-                <input type="text" id="productName" name="productName" required><br>
+                <input type="text" id="name" name="name" required><br>
                 
                 <label for="productCode">Product Code:</label>
-                <input type="text" id="productCode" name="productCode" required><br>
+                <input type="text" id="code" name="code" required><br>
                 
                 <button type="submit">Add Product</button>
                 </form>
