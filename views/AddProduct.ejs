@@ -16,18 +16,39 @@
         </div>
     </div>
     <div class="container">
-        <form method="POST">
-            <label for="productName">Product Name:</label>
-            <input type="text" id="productName" name="productName" required><br>
+        <div>
+            <!-- View Item -->
+             <table>
+                <tr>
+                    <th>S No</th>
+                    <th>Item Code</th>
+                    <th>Item Name</th>
+                </tr>
+                <% array.forEach(element => { %>
+                 <tr>
+                    <td>element.id</td>
+                    <td>element.code</td>
+                    <td>element.name</td>
+                 </tr>
+                <% }) %>
+                
+             </table>
+
+            <!-- Add Item -->
+             <div>
+                <form method="POST">
+                <label for="productName">Product Name:</label>
+                <input type="text" id="productName" name="productName" required><br>
+                
+                <label for="productCode">Product Code:</label>
+                <input type="text" id="productCode" name="productCode" required><br>
+                
+                <button type="submit">Add Product</button>
+                </form>
+             </div>
             
-            <label for="productCode">Product Code:</label>
-            <input type="text" id="productCode" name="productCode" required><br>
-            
-            <label for="price">Price:</label>
-            <input type="number" id="price" name="price" required><br>
-            
-            <button type="submit">Add Product</button>
-        </form>
+        </div>
+        
     </div>
 </body>
 </html>
