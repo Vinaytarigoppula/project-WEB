@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-<form action="/submitBill" method="post" onsubmit="collectTableData()">
+<form action="/submitBill" method="post" onsubmit="return collectTableData()">
     <div class="container">
         <div class="header">
             <div class="left">
@@ -195,7 +195,10 @@ function collectTableData() {
     });
 
     document.getElementById("tableData").value = JSON.stringify(items);
+
+    return true; // Important to let form submit proceed
 }
+
 </script>
 
 </body>

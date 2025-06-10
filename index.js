@@ -101,15 +101,26 @@ app.get("/generate-bill-number", async (req, res) => {
   const formatted = `${year}-${String(nextNumber).padStart(4, '0')}`;
   res.json({ billNumber: formatted });
 });
-app.post("/submitBill",async(req,res)=>{
-    let billdetails=req.body;
-    console.log(billdetails);
-    const tableData = req.body.tableData;
-    tableData.forEach(item => {
-        console.log(item.code, item.name, item.rate, item.quantity, item.discount);
-    });
-    res.redirect("/index");
-})
+app.post("/submitBill", async (req, res) => {
+    try {
+        let billdetails = req.body;
+        console.log("Raw form data:", billdetails);
+
+        // Parse the tableData string to JSON array
+        const tableData = JSON.parse(req.body.tableData);
+
+        console.log("Parsed Table Data:");
+        tableData.forEach(item => {
+            console.log(item.code, item.name, item.rate, item.quantity, item.discount);
+        });
+
+        res.redirect("/index");
+    } catch (err) {
+        console.error("Error in /submitBill:", err);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
