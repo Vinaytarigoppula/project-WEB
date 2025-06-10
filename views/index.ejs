@@ -17,25 +17,25 @@
             </div>
         </div>
     </div>
-
+<form action="/submitBill" method="post" onsubmit="collectTableData()">
     <div class="container">
         <div class="header">
             <div class="left">
                 <label>Bill No.:</label><br>
-                <input type="text" value="7996" readonly>
+                <input type="text" id="billNumberField" value="" name="billno" readonly>
             </div>
             <div class="right">
                 <label id="DateLabel">Date:</label><br>
-                <input type="text" value="07 Oct 2024" readonly>
+                <input type="text" id="dateField" name="date" readonly>
             </div>
         </div>
 
         <div class="taskbar">
-            <button class="button" onclick="addItem()">Add Item</button>
+            <button class="button" type="button" onclick="addItem()">Add Item</button>
         </div>
 
         <div class="table-container">
-            <table id="itemTable">
+            <table id="itemTable" name="item_details">
                 <thead>
                     <tr>
                         <th>Item Code</th>
@@ -52,14 +52,14 @@
                 </tbody>
             </table>
         </div>
-
+        <input type="hidden" name="tableData" id="tableData">
         <div class="input-group">
             <div>
                 <label>Customer Name:</label><br>
                 <input type="text" placeholder="Enter customer name">
             </div>
             <div>
-                <label>Sale Type:</label><br>
+                <label name="billype">Sale Type:</label><br>
                 <select>
                     <option value="cash">Cash</option>
                     <option value="card">Card</option>
@@ -70,30 +70,27 @@
 
         <div class="total-section">
             <label>Bill Amount:</label>
-            <input type="text" id="totalAmount" value="0.00" readonly>
+            <input type="text" id="totalAmount" name="amount" value="0.00" readonly>
             <label>Discount Amount:</label>
-            <input type="text" id="totalDiscount" value="0.00" readonly>
+            <input type="text" id="totalDiscount" name="discount" value="0.00" readonly>
             <label>Net Amount:</label>
-            <input type="text" id="netAmount" value="0.00" readonly>
+            <input type="text" id="netAmount" name="netamount" value="0.00" readonly>
         </div>
 
         <div class="footer">
             <button class="button" onclick="calculateTotal()">Calculate Total</button>
-            <button class="button" onclick="clearItems()">Clear Items</button>
+            <button class="button" type="submit" onclick="handlePrint()">Print</button>
         </div>
     </div>
-
-    <!-- Inject itemMapping from server -->
-
+</form>
     <script>
-        const itemMapping = <%- (itemMapping) %>
+        const itemMapping = <%- itemMapping %>;
     </script>
 
     <script>
         function addItem() {
             const table = document.getElementById("itemTable").getElementsByTagName("tbody")[0];
             const row = table.insertRow();
-
             row.innerHTML = `
                 <td>
                     <select onchange="updateProductName(this)" class="itemcode">
@@ -105,7 +102,7 @@
                 <td><input type="number" value="0" onchange="calculateAmount(this)" class="rateField"></td>
                 <td><input type="number" value="1" onchange="calculateAmount(this)" class="quantityField"></td>
                 <td class="amount">0.00</td>
-                <td><input type="number" value="0" onchange="calculateAmount(this)" placeholder="Discount" class="discountField"></td>
+                <td><input type="number" value="0" onchange="calculateAmount(this)" class="discountField" placeholder="Discount"></td>
                 <td><button onclick="removeItem(this)" class="button" style="background-color: #dc3545;">Remove</button></td>
             `;
         }
@@ -161,6 +158,45 @@
             document.querySelector("#itemTable tbody").innerHTML = "";
             calculateTotal();
         }
+
+        function formatDate(date) {
+            const options = { day: '2-digit', month: 'numeric', year: 'numeric' };
+            return date.toLocaleDateString('en-GB', options).replace(/ /g, ' ');
+        }
+
+        document.getElementById("dateField").value = formatDate(new Date());
+
+        async function handlePrint() {
+            try {
+                const res = await fetch("/generate-bill-number");
+                const data = await res.json();
+                document.getElementById("billNumberField").value = data.billNumber;
+                window.print();
+            } catch (err) {
+                alert("Failed to generate bill number");
+                console.error(err);
+            }
+        }
     </script>
+    <script>
+function collectTableData() {
+    const rows = document.querySelectorAll("#itemTable tbody tr");
+    const items = [];
+
+    rows.forEach(row => {
+        const item = {
+            code: row.querySelector(".itemcode")?.value || "",
+            name: row.querySelector(".nameField")?.value || "",
+            rate: row.querySelector(".rateField")?.value || "",
+            quantity: row.querySelector(".quantityField")?.value || "",
+            discount: row.querySelector(".discountField")?.value || ""
+        };
+        items.push(item);
+    });
+
+    document.getElementById("tableData").value = JSON.stringify(items);
+}
+</script>
+
 </body>
 </html>
