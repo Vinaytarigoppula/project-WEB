@@ -119,7 +119,7 @@ app.post("/submitBill", async (req, res) => {
         console.error("Error in /submitBill:", err);
         res.status(500).send("Internal Server Error");
     }
-});
+}); 
 
 
 app.listen(port, () => {
