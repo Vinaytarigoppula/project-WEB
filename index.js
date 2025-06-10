@@ -130,7 +130,6 @@ app.listen(port, () => {
 // 2. DATABASE SETUP SQL (run once in DB)
 // CREATE TABLE bill_tracker (year INTEGER PRIMARY KEY, current_no INTEGER);
 
-
 // 3. FRONTEND UPDATE IN index.ejs (ONLY CHANGED PARTS SHOWN)
 
 // Inside the bill number input:
