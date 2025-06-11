@@ -108,7 +108,7 @@ app.post("/register", async (req, res) => {
     "INSERT INTO users (username, password) VALUES (?, ?)",
     [username, hashedPassword]
   );
-  res.render("Login.ejs");
+  res.render("Profile.ejs");
 });
 
 app.post("/login", async (req, res) => {
@@ -241,6 +241,33 @@ app.post("/billSummaryform", async (req, res) => {
   }
 });
 
+app.get("/Profile",async(req,res) =>{
+  res.render("Profile");
+})
+app.use(express.json()); // for JSON body parsing
+app.use(express.urlencoded({ extended: true })); // for form URL-encoded data
+
+app.post("/shopData", async (req, res) => {
+    const { shopName, shopAddress, gstin, phone } = req.body;
+    const dbConn = await db;
+    if (!shopName || !shopAddress || !gstin || !phone) {
+      return res.status(400).json({ error: "All fields are required." });
+    }
+
+    await dbConn.run(
+      `INSERT INTO shop_data (shop_name, shop_address, gstin, phone) VALUES (?, ?, ?, ?)`,
+      [shopName, shopAddress, gstin, phone]
+    );
+
+    // ✅ Log the inserted values
+    console.log("Inserted data:", { shopName, shopAddress, gstin, phone });
+
+    // ✅ Query all data to confirm it's in DB
+    const allData = await dbConn.all(`SELECT * FROM shop_data`);
+    console.log("Current shop_data table contents:");
+    console.table(allData);
+    res.redirect("/index");
+});
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
