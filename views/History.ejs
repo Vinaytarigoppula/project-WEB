@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>History</title>
+  <link rel="stylesheet" href="static/hist.css">
+</head>
+<body>
+    <div class="nav-container">
+    <div class="navbar">
+      <span>Billing Application</span>
+      <div class="nav-buttons">
+        <button onclick="location.href='/History'">History</button>
+        <button onclick="location.href='/AddProduct'">Add Product</button>
+        <button>Logout</button>
+        <button>Profile</button>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <!-- LEFT SIDE: Bill View -->
+    <div class="bills-section">
+      <h2>Bill History</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Bill No</th>
+            <th>Bill Date</th>
+            <th>Bill Type</th>
+            <th>Bill Total</th>
+          </tr>
+        </thead>
+        <tbody id="billTableBody">
+        <% if (typeof bills !== 'undefined' && bills.length > 0) { %>
+            <% bills.forEach((bill, index) => { %>
+            <tr>
+                <td><%= index + 1 %></td>
+                <td><%= bill.billno %></td>
+                <td><%= new Date(bill.date).toLocaleDateString('en-GB') %></td>
+                <td>-</td> <!-- Bill Type removed -->
+                <td><%= bill.netamount.toFixed(2) %></td>
+            </tr>
+            <% }) %>
+        <% } else { %>
+            <tr>
+            <td colspan="5">No bills found for the selected date range.</td>
+            </tr>
+        <% } %>
+        </tbody>
+
+
+      </table>
+    </div>
+
+    <!-- RIGHT SIDE: Bill Summary Form -->
+    <div class="summary-section">
+      <h2>Bill Summary</h2>
+      <form id="billSummaryForm" action="/billSummaryform" method="post">
+        <label for="start">From:</label>
+        <input type="date" id="start" name="start" required value="<%= selectedStart %>">
+
+        <label for="end">To:</label>
+        <input type="date" id="end" name="end" required value="<%= selectedEnd %>">
+
+        <div class="buttons">
+          <button type="submit">OK</button>
+          <button type="reset">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,146 @@
+* {
+  box-sizing: border-box;
+}
+/* Navbar Styling */
+.navbar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #004085;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px; /* Adjusted padding to give more space */
+    color: #ffffff;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+.right label {
+    padding-right: 150px;
+}
+/* Navbar Buttons */
+.nav-buttons {
+    display: block;
+    gap: 40px;
+    margin: 0px 40px; /* Pushes the buttons to the far right */
+    align-items: center;
+}
+
+.nav-buttons button {
+    white-space: nowrap; /* Prevents text from wrapping */
+    overflow: hidden;    /* Optional: hides any overflow text */
+    text-overflow: ellipsis;
+    padding: 8px 12px;
+    background-color: #0069d9;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #ffffff;
+    cursor: pointer;
+    margin: 0px 10px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.nav-buttons button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.nav-buttons button:focus {
+    outline: none;
+    background-color: #004085;
+}
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f4f4f4;
+}
+
+.container {
+    margin-top: 100px;
+  display: flex;
+  height: 100vh;
+}
+
+/* Bill Table Section */
+.bills-section {
+  width: 60%;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  border-right: 1px solid #ccc;
+}
+
+.bills-section h2 {
+  margin-bottom: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: center;
+  padding: 8px;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Bill Summary Section */
+.summary-section {
+  width: 40%;
+  padding: 20px;
+  background-color: #fdeff0;
+}
+
+.summary-section h2 {
+  margin-bottom: 15px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input, select {
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  background-color: #2196F3;
+  color: white;
+  font-weight: bold;
+}
+
+button[type="reset"] {
+  background-color: #f44336;
+}

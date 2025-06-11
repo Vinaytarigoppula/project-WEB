@@ -205,6 +205,46 @@ app.post("/submitBill", async (req, res) => {
   }
 });
 
+
+app.get("/History", async (req, res) => {
+  res.render("History", {
+    bills: [],
+    selectedStart: "",
+    selectedEnd: "",
+  });
+});
+
+
+app.post("/billSummaryform", async (req, res) => {
+  try {
+    const dbConn = await db;
+    const { start, end } = req.body;
+
+    const query = `
+      SELECT DISTINCT billno, date, netamount
+      FROM billing
+      WHERE date BETWEEN ? AND ?
+      ORDER BY date ASC
+    `;
+    const params = [start, end];
+
+    const bills = await dbConn.all(query, params);
+    
+    console.log("Fetched bills:");
+    bills.forEach(b => console.log(b));
+
+    res.render("History", {
+      bills,
+      selectedStart: start,
+      selectedEnd: end,
+    });
+  } catch (err) {
+    console.error("Error fetching bill summary:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

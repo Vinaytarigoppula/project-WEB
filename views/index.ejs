@@ -11,6 +11,7 @@
     <div class="navbar">
       <span>Billing Application</span>
       <div class="nav-buttons">
+        <button onclick="location.href='/History'">History</button>
         <button onclick="location.href='/AddProduct'">Add Product</button>
         <button>Logout</button>
         <button>Profile</button>
@@ -33,7 +34,7 @@
         </div>
         <div class="right">
           <label>Date:</label><br>
-          <input type="text" id="dateField" name="date" readonly>
+          <input type="date" id="dateField" name="date" readonly>
         </div>
       </div>
 
@@ -95,8 +96,12 @@
     const itemMapping = <%- itemMapping %>;
 
     // Set date on load
-    document.getElementById("dateField").value = new Date()
-      .toLocaleDateString("en-GB", { day: "2-digit", month: "numeric", year: "numeric" });
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    document.getElementById("dateField").value = `${yyyy}-${mm}-${dd}`;
+
 
     function addItem() {
       const tbody = document.querySelector("#itemTable tbody");
