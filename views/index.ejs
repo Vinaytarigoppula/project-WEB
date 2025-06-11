@@ -1,205 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Billing Application</title>
-    <link rel="stylesheet" href="/static/index.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Billing Application</title>
+  <link rel="stylesheet" href="/static/index.css">
 </head>
 <body>
-    <div class="nav-container">
-        <div class="navbar">
-            <span>Billing Application</span>
-            <div class="nav-buttons">
-                <button onclick="window.location.href='/AddProduct'">Add Product</button>
-                <button>Logout</button>
-                <button>Profile</button>
-            </div>
-        </div>
+  <div class="nav-container">
+    <div class="navbar">
+      <span>Billing Application</span>
+      <div class="nav-buttons">
+        <button onclick="location.href='/AddProduct'">Add Product</button>
+        <button>Logout</button>
+        <button>Profile</button>
+      </div>
     </div>
-<form action="/submitBill" method="post" onsubmit="return collectTableData()">
+  </div>
+
+  <form action="/submitBill" method="post" onsubmit="collectTableData()">
     <div class="container">
-        <div class="header">
-            <div class="left">
-                <label>Bill No.:</label><br>
-                <input type="text" id="billNumberField" value="" name="billno" readonly>
-            </div>
-            <div class="right">
-                <label id="DateLabel">Date:</label><br>
-                <input type="text" id="dateField" name="date" readonly>
-            </div>
-        </div>
 
-        <div class="taskbar">
-            <button class="button" type="button" onclick="addItem()">Add Item</button>
+      <div class="header">
+        <div class="left">
+          <label>Bill No.:</label><br>
+          <input
+            type="text"
+            id="billNumberField"
+            name="billno"
+            value="<%= billNumber %>"
+            readonly>
         </div>
+        <div class="right">
+          <label>Date:</label><br>
+          <input type="text" id="dateField" name="date" readonly>
+        </div>
+      </div>
 
-        <div class="table-container">
-            <table id="itemTable" name="item_details">
-                <thead>
-                    <tr>
-                        <th>Item Code</th>
-                        <th>Name</th>
-                        <th>Rate</th>
-                        <th>Quantity</th>
-                        <th>Amount</th>
-                        <th>Discount (%)</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Dynamic rows -->
-                </tbody>
-            </table>
-        </div>
-        <input type="hidden" name="tableData" id="tableData">
-        <div class="input-group">
-            <div>
-                <label>Customer Name:</label><br>
-                <input type="text" placeholder="Enter customer name">
-            </div>
-            <div>
-                <label name="billype">Sale Type:</label><br>
-                <select>
-                    <option value="cash">Cash</option>
-                    <option value="card">Card</option>
-                    <option value="upi">UPI</option>
-                </select>
-            </div>
-        </div>
+      <div class="taskbar">
+        <button class="button" type="button" onclick="addItem()">Add Item</button>
+      </div>
 
-        <div class="total-section">
-            <label>Bill Amount:</label>
-            <input type="text" id="totalAmount" name="amount" value="0.00" readonly>
-            <label>Discount Amount:</label>
-            <input type="text" id="totalDiscount" name="discount" value="0.00" readonly>
-            <label>Net Amount:</label>
-            <input type="text" id="netAmount" name="netamount" value="0.00" readonly>
-        </div>
+      <div class="table-container">
+        <table id="itemTable">
+          <thead>
+            <tr>
+              <th>Item Code</th>
+              <th>Name</th>
+              <th>Rate</th>
+              <th>Quantity</th>
+              <th>Amount</th>
+              <th>Discount (%)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
 
-        <div class="footer">
-            <button class="button" onclick="calculateTotal()">Calculate Total</button>
-            <button class="button" type="submit" onclick="handlePrint()">Print</button>
+      <input type="hidden" name="tableData" id="tableData">
+
+      <div class="input-group">
+        <div>
+          <label>Customer Name:</label><br>
+          <input type="text" name="customer" placeholder="Enter customer name">
         </div>
+        <div>
+          <label>Sale Type:</label><br>
+          <select name="saletype">
+            <option value="cash">Cash</option>
+            <option value="card">Card</option>
+            <option value="upi">UPI</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="total-section">
+        <label>Bill Amount:</label>
+        <input type="text" id="totalAmount" name="amount" value="0.00" readonly>
+        <label>Discount Amount:</label>
+        <input type="text" id="totalDiscount" name="discount" value="0.00" readonly>
+        <label>Net Amount:</label>
+        <input type="text" id="netAmount" name="netamount" value="0.00" readonly>
+      </div>
+
+      <div class="footer">
+        <button class="button" type="button" onclick="calculateTotal()">Calculate Total</button>
+        <button class="button" type="submit" onclick="window.print()">Print</button>
+      </div>
     </div>
-</form>
-    <script>
-        const itemMapping = <%- itemMapping %>;
-    </script>
+  </form>
 
-    <script>
-        function addItem() {
-            const table = document.getElementById("itemTable").getElementsByTagName("tbody")[0];
-            const row = table.insertRow();
-            row.innerHTML = `
-                <td>
-                    <select onchange="updateProductName(this)" class="itemcode">
-                        <option value="">Select Code</option>
-                        ${Object.keys(itemMapping).map(code => `<option value="${code}">${code}</option>`).join('')}
-                    </select>
-                </td>
-                <td><input type="text" placeholder="Name" readonly class="nameField"></td>
-                <td><input type="number" value="0" onchange="calculateAmount(this)" class="rateField"></td>
-                <td><input type="number" value="1" onchange="calculateAmount(this)" class="quantityField"></td>
-                <td class="amount">0.00</td>
-                <td><input type="number" value="0" onchange="calculateAmount(this)" class="discountField" placeholder="Discount"></td>
-                <td><button onclick="removeItem(this)" class="button" style="background-color: #dc3545;">Remove</button></td>
-            `;
-        }
+  <script>
+    const itemMapping = <%- itemMapping %>;
 
-        function updateProductName(selectElement) {
-            const selectedCode = selectElement.value;
-            const row = selectElement.closest("tr");
-            const nameField = row.querySelector(".nameField");
-            nameField.value = itemMapping[selectedCode] || "";
-        }
+    // Set date on load
+    document.getElementById("dateField").value = new Date()
+      .toLocaleDateString("en-GB", { day: "2-digit", month: "numeric", year: "numeric" });
 
-        function removeItem(button) {
-            button.closest("tr").remove();
-            calculateTotal();
-        }
+    function addItem() {
+      const tbody = document.querySelector("#itemTable tbody");
+      const row = tbody.insertRow();
+      row.innerHTML = `
+        <td>
+          <select onchange="updateName(this)" class="itemcode">
+            <option value="">Select Code</option>
+            ${Object.keys(itemMapping).map(c => `<option value="${c}">${c}</option>`).join("")}
+          </select>
+        </td>
+        <td><input type="text" readonly class="nameField"></td>
+        <td><input type="number" value="0" onchange="updateRow(this)" class="rateField"></td>
+        <td><input type="number" value="1" onchange="updateRow(this)" class="quantityField"></td>
+        <td class="amount">0.00</td>
+        <td><input type="number" value="0" onchange="updateRow(this)" class="discountField"></td>
+        <td>
+          <button
+            type="button"
+            class="button"
+            style="background-color: #dc3545; color: white;"
+            onclick="removeItem(this)"
+          >
+            Remove
+          </button>
+        </td>
+      `;
+    }
 
-        function calculateAmount(element) {
-            const row = element.closest("tr");
-            const rate = parseFloat(row.querySelector(".rateField").value) || 0;
-            const quantity = parseFloat(row.querySelector(".quantityField").value) || 0;
-            const discountPercent = parseFloat(row.querySelector(".discountField").value) || 0;
+    function updateName(sel) {
+      const r = sel.closest("tr");
+      r.querySelector(".nameField").value = itemMapping[sel.value] || "";
+      updateRow(sel);
+    }
 
-            const amount = rate * quantity;
-            const discount = (amount * discountPercent) / 100;
+    function updateRow(el) {
+      const r = el.closest("tr");
+      const rate = +r.querySelector(".rateField").value;
+      const qty  = +r.querySelector(".quantityField").value;
+      const disc = +r.querySelector(".discountField").value;
+      const amt  = rate * qty;
+      r.querySelector(".amount").textContent = (amt - amt * disc/100).toFixed(2);
+      calculateTotal();
+    }
 
-            row.querySelector(".amount").textContent = (amount - discount).toFixed(2);
-            calculateTotal();
-        }
+    function removeItem(btn) {
+      btn.closest("tr").remove();
+      calculateTotal();
+    }
 
-        function calculateTotal() {
-            let totalAmount = 0;
-            let totalDiscount = 0;
+    function calculateTotal() {
+      let tot = 0, dsc = 0;
+      document.querySelectorAll("#itemTable tbody tr").forEach(r => {
+        const rate = +r.querySelector(".rateField").value;
+        const qty  = +r.querySelector(".quantityField").value;
+        const disc = +r.querySelector(".discountField").value;
+        const amt  = rate * qty;
+        tot += amt;
+        dsc += amt * disc/100;
+      });
+      document.getElementById("totalAmount").value   = tot.toFixed(2);
+      document.getElementById("totalDiscount").value = dsc.toFixed(2);
+      document.getElementById("netAmount").value     = (tot - dsc).toFixed(2);
+    }
 
-            const rows = document.querySelectorAll("#itemTable tbody tr");
-            rows.forEach(row => {
-                const rate = parseFloat(row.querySelector(".rateField").value) || 0;
-                const quantity = parseFloat(row.querySelector(".quantityField").value) || 0;
-                const discountPercent = parseFloat(row.querySelector(".discountField").value) || 0;
-
-                const amount = rate * quantity;
-                const discount = (amount * discountPercent) / 100;
-
-                totalAmount += amount;
-                totalDiscount += discount;
-            });
-
-            document.getElementById("totalAmount").value = totalAmount.toFixed(2);
-            document.getElementById("totalDiscount").value = totalDiscount.toFixed(2);
-            document.getElementById("netAmount").value = (totalAmount - totalDiscount).toFixed(2);
-        }
-
-        function clearItems() {
-            document.querySelector("#itemTable tbody").innerHTML = "";
-            calculateTotal();
-        }
-
-        function formatDate(date) {
-            const options = { day: '2-digit', month: 'numeric', year: 'numeric' };
-            return date.toLocaleDateString('en-GB', options).replace(/ /g, ' ');
-        }
-
-        document.getElementById("dateField").value = formatDate(new Date());
-
-        async function handlePrint() {
-            try {
-                const res = await fetch("/generate-bill-number");
-                const data = await res.json();
-                document.getElementById("billNumberField").value = data.billNumber;
-                window.print();
-            } catch (err) {
-                alert("Failed to generate bill number");
-                console.error(err);
-            }
-        }
-    </script>
-    <script>
-function collectTableData() {
-    const rows = document.querySelectorAll("#itemTable tbody tr");
-    const items = [];
-
-    rows.forEach(row => {
-        const item = {
-            code: row.querySelector(".itemcode")?.value || "",
-            name: row.querySelector(".nameField")?.value || "",
-            rate: row.querySelector(".rateField")?.value || "",
-            quantity: row.querySelector(".quantityField")?.value || "",
-            discount: row.querySelector(".discountField")?.value || ""
-        };
-        items.push(item);
-    });
-
-    document.getElementById("tableData").value = JSON.stringify(items);
-
-    return true; // Important to let form submit proceed
-}
-
-</script>
-
+    function collectTableData() {
+      const data = Array.from(
+        document.querySelectorAll("#itemTable tbody tr")
+      ).map(r => ({
+        code:     r.querySelector(".itemcode").value,
+        name:     r.querySelector(".nameField").value,
+        rate:     r.querySelector(".rateField").value,
+        quantity: r.querySelector(".quantityField").value,
+        discount: r.querySelector(".discountField").value
+      }));
+      document.getElementById("tableData").value = JSON.stringify(data);
+      return true;
+    }
+  </script>
 </body>
 </html>
