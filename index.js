@@ -154,28 +154,26 @@ app.get("/deleteproduct", async (req, res) => {
 // ————————————————————————————————————————————————
 // Submit bill — use session-stored billNumber, then clear it
 // ————————————————————————————————————————————————
-
+// Submit bill — use session-stored billNumber, then clear it
 app.post("/submitBill", async (req, res) => {
   try {
     const dbConn = await db;
     const billdetails = req.body;
     console.log("Raw form data:", billdetails);
 
-    // Parse items array
     const tableData = JSON.parse(billdetails.tableData);
-
-    // Shared bill fields
     const billno = req.session.billNumber;
-    const date = billdetails.date;
+    const rawDate = new Date(billdetails.date);
+    const date = rawDate.toISOString().split("T")[0]; // Fix date format
     const totalAmount = parseFloat(billdetails.amount);
     const totalDiscount = parseFloat(billdetails.discount);
     const netAmount = parseFloat(billdetails.netamount);
+    const saletype=billdetails.saletype;
 
-    // Insert each item into billing table
     const insertStmt = await dbConn.prepare(`
       INSERT INTO billing (
-        billno, date, code, name, rate, quantity, item_discount, amount, total_discount, netamount
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        billno, date, code, name, rate, quantity, item_discount, amount, total_discount, netamount,type
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     for (const item of tableData) {
@@ -190,20 +188,20 @@ app.post("/submitBill", async (req, res) => {
         parseFloat(discount),
         totalAmount,
         totalDiscount,
-        netAmount
+        netAmount,
+        saletype
       );
     }
     await insertStmt.finalize();
 
-    // Clear session so next GET /index will generate a fresh billNumber
     delete req.session.billNumber;
-
     res.redirect("/index");
   } catch (err) {
     console.error("Error in /submitBill:", err);
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 
 app.get("/History", async (req, res) => {
@@ -220,11 +218,10 @@ app.post("/billSummaryform", async (req, res) => {
     const dbConn = await db;
     const { start, end } = req.body;
 
-    const query = `
-      SELECT DISTINCT billno, date, netamount
-      FROM billing
-      WHERE date BETWEEN ? AND ?
-      ORDER BY date ASC
+    const query = `SELECT DISTINCT billno, date, netamount, type
+                  FROM billing
+                  WHERE DATE(date) BETWEEN DATE(?) AND DATE(?)
+                  ORDER BY DATE(date) ASC
     `;
     const params = [start, end];
 

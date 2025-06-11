@@ -39,7 +39,7 @@
                 <td><%= index + 1 %></td>
                 <td><%= bill.billno %></td>
                 <td><%= new Date(bill.date).toLocaleDateString('en-GB') %></td>
-                <td>-</td> <!-- Bill Type removed -->
+                <td><%= bill.type %></td> <!-- Bill Type removed -->
                 <td><%= bill.netamount.toFixed(2) %></td>
             </tr>
             <% }) %>
