@@ -80,7 +80,7 @@ app.get("/index", async (req, res) => {
       );
     }
 
-    req.session.billNumber = `${year}-${String(nextNumber).padStart(4, "0")}`;
+    req.session.billNumber = `${String(nextNumber).padStart(4, "0")}`;
   }
 
   // Fetch products and mapping
