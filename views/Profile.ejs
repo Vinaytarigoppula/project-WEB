@@ -12,9 +12,12 @@
   <div class="nav-container">
     <div class="navbar">
       <span class="nav-title">Profile Page</span>
-      <div class="nav-buttons">
+      <% if (readonly) { %>
+          <div class="nav-buttons">
         <button onclick="location.href='/index'">Home</button>
       </div>
+        <% }  %>
+      
     </div>
   </div>
 
