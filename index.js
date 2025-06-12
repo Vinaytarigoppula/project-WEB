@@ -81,10 +81,12 @@ app.post('/login', async (req, res) => {
 app.get('/Profile', requireLogin, async (req, res) => {
   const dbConn = await db;
   const userId = req.session.userid;
+  const k=await dbConn.get('select username from users where userId=?',[userId] );
+  const username=k.username;
   const shop = await dbConn.get(
     'SELECT * FROM shop_data WHERE user_id=?', [userId]
   );
-  res.render('Profile', { profile: shop || {}, readonly: !!shop });
+  res.render('Profile', {username, profile: shop || {}, readonly: !!shop });
 });
 app.post('/shopData', requireLogin, async (req, res) => {
   const { shopName, shopAddress, gstin, phone } = req.body;
