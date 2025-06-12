@@ -3,21 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <title>Receipt</title>
-  <style>
+<style>
+  body {
+    font-family: monospace;
+    width: 58mm;
+    margin: 0 auto;
+    padding: 0;
+    background: white;
+  }
+
+  .center { text-align: center; }
+  .right { text-align: right; }
+  .bold { font-weight: bold; }
+  hr { border: none; border-top: 1px dashed black; margin: 5px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  td { padding: 2px 0; }
+  .small { font-size: 11px; }
+
+  @media print {
     body {
-      font-family: monospace;
       width: 58mm;
-      margin: 0 auto;
-      padding: 10px;
+      margin: 0;
+      padding: 0;
     }
-    .center { text-align: center; }
-    .right { text-align: right; }
-    .bold { font-weight: bold; }
-    hr { border: none; border-top: 1px dashed black; margin: 5px 0; }
-    table { width: 100%; border-collapse: collapse; font-size: 12px; }
-    td { padding: 2px 0; }
-    .small { font-size: 11px; }
-  </style>
+
+    @page {
+      size: 58mm auto;
+      margin: 0;
+    }
+  }
+</style>
 </head>
 <body>
 
@@ -91,6 +106,12 @@
     THANK YOU<br>
     PLEASE VISIT AGAIN
   </div>
+  <script>
+  window.onload = function () {
+    window.print();
+  };
+</script>
+
 
 </body>
 </html>

@@ -202,7 +202,7 @@ app.post('/submitBill', requireLogin, async (req, res) => {
   }
   await stmt.finalize();
   delete req.session.billNumber;
-  res.redirect('/index');
+  res.render('Receipt');
 });
 
 // ------------------------------------------------
@@ -226,6 +226,7 @@ app.post('/billSummaryform', requireLogin, async (req, res) => {
     selectedEnd: req.body.end,
   });
 });
+
 
 // ------------------------------------------------
 // Start server
