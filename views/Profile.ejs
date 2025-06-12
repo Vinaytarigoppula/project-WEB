@@ -1,3 +1,5 @@
+
+<!-- Profile.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,25 +19,29 @@
     <!-- Left Panel -->
     <div class="left-panel">
       <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Account Icon" class="account-icon" />
-      <h2 class="account-name">Mustaquim</h2>
+      <h2 class="account-name"><%= username %></h2>
     </div>
 
     <!-- Right Panel (Form) -->
     <div class="right-panel">
       <form id="profileForm" method="post" action="/shopData">
         <label for="shopName">Shop Name:</label>
-        <input type="text" id="shopName" name="shopName" required />
+        <input type="text" id="shopName" name="shopName" value="<%= profile.shop_name || '' %>" <%= readonly ? 'readonly' : '' %> required />
 
         <label for="shopAddress">Shop Address:</label>
-        <input type="text" id="shopAddress" name="shopAddress" required />
+        <input type="text" id="shopAddress" name="shopAddress" value="<%= profile.shop_address || '' %>" <%= readonly ? 'readonly' : '' %> required />
 
         <label for="gstin">GSTIN:</label>
-        <input type="text" id="gstin" name="gstin" required />
+        <input type="text" id="gstin" name="gstin" value="<%= profile.gstin || '' %>" <%= readonly ? 'readonly' : '' %> required />
 
         <label for="phone">Phone Number:</label>
-        <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" />
+        <input type="tel" id="phone" name="phone" value="<%= profile.phone || '' %>" <%= readonly ? 'readonly' : '' %> required pattern="[0-9]{10}" />
 
-        <button type="submit">Continue</button>
+        <% if (!readonly) { %>
+          <button type="submit">Continue</button>
+        <% } else { %>
+          <p style="color: gray;">Profile is locked after first submission.</p>
+        <% } %>
       </form>
     </div>
   </div>
