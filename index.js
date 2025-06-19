@@ -76,6 +76,30 @@ app.post('/login', async (req, res) => {
     res.redirect('/index');
   } else res.send('Invalid credentials');
 });
+app.get("/AddProduct", async (req, res) => {
+  const dbConn = await db;
+  const array = await dbConn.all("SELECT * FROM product"); // <-- Fix here
+  res.render("AddProduct", { array });
+});
+app.post("/addproduct", async (req,res)  =>{
+  const dbConn= await db;
+  let k=req.body;
+  await dbConn.run("insert into product (code,name) values(?,?)",[k.code,k.name]);
+  res.redirect("/AddProduct");
+})
+app.get("/deleteproduct", async (req, res) => {
+  const dbConn = await db;
+  const code = req.query.code;
+
+  try {
+    await dbConn.run("DELETE FROM product WHERE code = ?", [code]);
+    res.status(200).send("Deleted");
+  } catch (err) {
+    console.error("Delete error:", err);
+    res.status(500).send("Deletion failed");
+  }
+});
+
 
 // Profile
 app.get('/Profile', requireLogin, async (req, res) => {
